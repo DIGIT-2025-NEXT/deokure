@@ -51,7 +51,7 @@ export default function LoginPage() {
         open={open}
         autoHideDuration={3000}
         onClose={() => setOpen(false)}
-        message={`ようこそ ${name}さん！`}
+        message={`ようこそ、${name}さん！`}
       />
     </Container>
   );
