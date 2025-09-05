@@ -1,103 +1,62 @@
-import Image from "next/image";
+// app/page.tsx
+import Link from "next/link";
+import { Search, Plus } from "lucide-react";
 
-export default function Home() {
+
+//投稿データの仮置き。実際はここを SupabaseなどDB に置き換えて使う予定。
+const mockPosts = [
+  { id: "3", content: "戸畑祇園大山笠、迫力がすごい！", created_at: "2025-09-05T10:00:00" },
+  { id: "2", content: "小倉城のライトアップを見に行ったよ✨", created_at: "2025-09-04T20:00:00" },
+  { id: "1", content: "門司港レトロに遊びに行ってきました！", created_at: "2025-09-03T15:00:00" },
+];
+
+export default function HomePage() {
+
+  //投稿を「新しい順」に並べ替え
+  //sort 関数で created_at を比較して、日付の新しいものを先頭に持ってきている
+  const posts = [...mockPosts].sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="relative w-full min-h-screen bg-gray-50">
+  {/* ヘッダー */}
+  <header className="w-full flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
+    <h1 className="text-lg font-bold">北九log</h1>
+  </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  {/* 投稿一覧 */}
+  <div className="w-full p-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    {posts.map((post) => (
+      <article
+        key={post.id}
+        className="p-4 border rounded-xl shadow-sm bg-white flex flex-col"
+      >
+        <p>{post.content}</p>
+        <p className="text-xs text-gray-500 mt-2">
+          {new Date(post.created_at).toLocaleString("ja-JP")}
+        </p>
+      </article>
+    ))}
+  </div>
+
+  {/* 右下の固定ボタン群（縦方向） */}
+  <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2">
+    {/* 検索ボタン（上） */}
+    <button className="bg-blue-500 text-white p-3 rounded-full shadow-md hover:bg-blue-400">
+      <Search className="w-8 h-8" />
+    </button>
+
+    {/* +ボタン（下） */}
+    <Link
+      href="/post/new"
+      className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+    >
+      <Plus className="w-6 h-6" />
+    </Link>
+  </div>
+
+</main>
+
   );
 }
