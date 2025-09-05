@@ -23,9 +23,6 @@ export default function HomePage() {
   {/* ヘッダー */}
   <header className="w-full flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
     <h1 className="text-lg font-bold">北九log</h1>
-    <button className="p-2 rounded-full hover:bg-blue-500">
-      <Search className="w-5 h-5" />
-    </button>
   </header>
 
   {/* 投稿一覧 */}
@@ -43,13 +40,22 @@ export default function HomePage() {
     ))}
   </div>
 
-  {/* 投稿ボタン */}
-  <Link
-    href="/post/new"
-    className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
-  >
-    <Plus className="w-6 h-6" />
-  </Link>
+  {/* 右下の固定ボタン群（縦方向） */}
+  <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2">
+    {/* 検索ボタン（上） */}
+    <button className="bg-blue-500 text-white p-3 rounded-full shadow-md hover:bg-blue-400">
+      <Search className="w-8 h-8" />
+    </button>
+
+    {/* +ボタン（下） */}
+    <Link
+      href="/post/new"
+      className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+    >
+      <Plus className="w-6 h-6" />
+    </Link>
+  </div>
+
 </main>
 
   );
