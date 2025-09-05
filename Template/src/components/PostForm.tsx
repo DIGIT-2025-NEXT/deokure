@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabaseClient"
 
 const PostForm = () => {
   const [title, setTitle] = useState("");
@@ -24,7 +24,7 @@ const PostForm = () => {
         alert("画像のアップロードに失敗しました。");
         return;
       }
-      imageUrl = data.Key;
+      imageUrl = data?.path ?? "";
     }
 
     const { error: postError } = await supabase
@@ -44,6 +44,15 @@ const PostForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
+        <label htmlFor="image">画像:</label>
+        <input
+          type="file"
+          id="image"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files?.[0] || null)}
+        />
+      </div>
+      <div>
         <label htmlFor="title">タイトル:</label>
         <input
           type="text"
@@ -54,21 +63,12 @@ const PostForm = () => {
         />
       </div>
       <div>
-        <label htmlFor="content">内容:</label>
+        <label htmlFor="content">コメント:</label>
         <textarea
           id="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
-        />
-      </div>
-      <div>
-        <label htmlFor="image">画像:</label>
-        <input
-          type="file"
-          id="image"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
         />
       </div>
       <button type="submit">投稿する</button>
