@@ -1,0 +1,13 @@
+import React from "react";
+import PostForm from "../components/PostForm";
+
+const PostPage = () => {
+    return (
+        <div>
+            <h1>投稿する</h1>
+            <PostForm />
+        </div>
+    );
+};
+
+export default PostPage;
