@@ -43,9 +43,12 @@ export default function HomePage() {
   {/* 右下の固定ボタン群（縦方向） */}
   <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2">
     {/* 検索ボタン（上） */}
-    <button className="bg-blue-500 text-white p-3 rounded-full shadow-md hover:bg-blue-400">
-      <Search className="w-8 h-8" />
-    </button>
+    <Link
+      href="/events"
+      className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+    >
+       <Search className="w-6 h-6" />
+    </Link>
 
     {/* +ボタン（下） */}
     <Link
