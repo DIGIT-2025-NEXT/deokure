@@ -1,6 +1,6 @@
 // app/page.tsx
 import Link from "next/link";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus , HelpCircle} from "lucide-react";
 
 
 //投稿データの仮置き。実際はここを SupabaseなどDB に置き換えて使う予定。
@@ -23,6 +23,13 @@ export default function HomePage() {
   {/* ヘッダー */}
   <header className="w-full flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
     <h1 className="text-lg font-bold">北九log</h1>
+    <Link
+      href="/ifu"
+      className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+    >
+      <HelpCircle className="w-5 h-5" />
+    </Link>
+
   </header>
 
   {/* 投稿一覧 */}
@@ -41,7 +48,7 @@ export default function HomePage() {
   </div>
 
   {/* 右下の固定ボタン群（縦方向） */}
-  <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2">
+   <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2">
     {/* 検索ボタン（上） */}
     <Link
       href="/events"
@@ -52,7 +59,7 @@ export default function HomePage() {
 
     {/* +ボタン（下） */}
     <Link
-      href="/post/new"
+      href="/Template"
       className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
     >
       <Plus className="w-6 h-6" />
