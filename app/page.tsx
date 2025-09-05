@@ -57,7 +57,6 @@ export default function HomePage() {
        <Search className="w-6 h-6" />
     </Link>
 
-
     {/* +ボタン（下） */}
     <Link
       href="/Template"
