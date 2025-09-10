@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
+=======
+
+"use client";
+
+import React, { useState } from "react";
+import { supabase } from "../lib/supabaseClient"
+>>>>>>> 256a33b28d54e2147fcfa715711f00c5d8aae5bc
 
 // タグ項目
 const TAGS_TYPE1 = [
