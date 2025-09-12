@@ -5,7 +5,6 @@ import "./src/styles/Template_style.css";
 const PostPage = () => {
     return (
         <div>
-            <h1>投稿</h1>
             <PostForm />
         </div>
     );
