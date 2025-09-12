@@ -21,7 +21,7 @@ export default function EventsPage() {
           fontWeight: 600,
           letterSpacing: '0.5px'
         }}>
-          🔍 スポット検索
+          KitaqLog
         </h1>
         <p style={{
           margin: '0.5rem 0 0 0',
@@ -29,7 +29,7 @@ export default function EventsPage() {
           color: 'rgba(255, 255, 255, 0.8)',
           fontWeight: 400
         }}>
-          お好みのカテゴリーと地域でお店やスポットを探しましょう
+          お住まいの区を選択してイベントを探しましょう
         </p>
       </header>
       
