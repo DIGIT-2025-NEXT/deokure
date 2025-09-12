@@ -8,7 +8,7 @@ export default function TestLogin() {
       variant="contained"
       onClick={() => signIn("google", { callbackUrl: "/" })}
     >
-      Googleでログイン
+      ごおｇぇでログイン
     </Button>
   );
 }
