@@ -89,6 +89,7 @@ const PostForm = () => {
 
     // 画像がある場合はアップロード
     if (image) {
+      console.log('画像が選択されています:', image.name);
       imageUrl = await uploadImage(image);
       if (!imageUrl) {
         alert("画像のアップロードに失敗しました。");
@@ -103,7 +104,8 @@ const PostForm = () => {
         title,
         content,
         image_url: imageUrl,
-        user_id: userId,
+        // user_id: userId, // ログイン機能実装時に有効化
+        user_id: userId, // 一時的にダミーIDを使用
         tag_store_name: selectedStoreName,
         tag_place_name: selectedPlaceName,
       },
