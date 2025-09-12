@@ -25,7 +25,7 @@ export default function EventSearchPage() {
         boxShadow: '0 2px 4px rgba(0,0,0,0.03)' 
       }}>
         <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#fff' }}>
-          イベント検索
+          北九log
         </h1>
       </header>
       
