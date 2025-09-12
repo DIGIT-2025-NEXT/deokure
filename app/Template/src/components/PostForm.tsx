@@ -43,6 +43,9 @@ const PostForm = () => {
       const fileName = `${Date.now()}.${fileExt}`;
       const filePath = `post-images/${fileName}`;
 
+      //認証がない状態で動かすためにデモの値セット
+      //setUserId("00000000-0000-0000-0000-000000000000");
+
       const { error: uploadError } = await supabase.storage
         .from('post-images') // バケット名は適切に変更してください
         .upload(filePath, file);
@@ -55,7 +58,8 @@ const PostForm = () => {
       // 公開URLを取得
       const { data } = supabase.storage
         .from('post-images')
-        .getPublicUrl(filePath);
+        .getPublicUrl(fileName);
+      alert('Image uploaded to: {data}');  
 
       return data.publicUrl;
     } catch (error) {
@@ -79,11 +83,11 @@ const PostForm = () => {
       setIsLoading(false);
       return;
     }
-    if (!userId) {
+    /*if (!userId) {
       alert("ユーザー情報が取得できません。再度ログインしてください。");
       setIsLoading(false);
       return;
-    }
+    }*/
 
     let imageUrl: string | null = null;
 
@@ -103,9 +107,10 @@ const PostForm = () => {
       {
         title,
         content,
-        image_url: imageUrl,
+        image_url: "https://swoukqrviikfqcmvsqni.supabase.co/storage/v1/object/public/post-images/post-images/1757653909969.png",
         // user_id: userId, // ログイン機能実装時に有効化
-        user_id: userId, // 一時的にダミーIDを使用
+        //user_id: userId, // 一時的にダミーIDを使用
+        user_id: "00000000-0000-0000-0000-000000000000", // デモ用ダミーID
         tag_store_name: selectedStoreName,
         tag_place_name: selectedPlaceName,
       },
