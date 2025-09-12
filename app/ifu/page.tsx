@@ -2,12 +2,21 @@
 
 import * as React from 'react';
 import { styled, alpha, ThemeProvider, createTheme } from '@mui/material/styles';
+import Link from "next/link";
+import { Search, Plus , HelpCircle} from "lucide-react";
 
 export default function Home() {
   return (
       <>
-      <header className="w-full flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
+       {/* ヘッダー */}
+       <header className="w-full flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
         <h1 className="text-lg font-bold">北九log</h1>
+        <Link
+        href="/ifu"
+        className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+        >
+        <HelpCircle className="w-5 h-5" />
+        </Link>
         </header>
 
 
