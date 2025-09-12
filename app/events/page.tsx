@@ -38,8 +38,10 @@ const EventsPage: React.FC = () => {
         textAlign: 'center',
         boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)'
       }}>
+
         <h1 style={{ margin: 0, fontSize: '1.75rem', color: '#fff', fontWeight: 600, letterSpacing: '0.5px' }}>北九log</h1>
         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 400 }}>
+
           お住まいの区を選択してイベントを探しましょう
         </p>
       </header>
