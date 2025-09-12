@@ -21,7 +21,7 @@ export default function EventsPage() {
           fontWeight: 600,
           letterSpacing: '0.5px'
         }}>
-          北九log
+          KitaqLog
         </h1>
         <p style={{
           margin: '0.5rem 0 0 0',
