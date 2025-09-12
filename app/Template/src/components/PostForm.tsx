@@ -1,12 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 
 // タグ項目
 const TAGS_TYPE1 = [
   "カフェ", "レストラン", "居酒屋", "bar",
-  "あ", "い", "う」", "え"
+  "", "い", "う」", "え"
 ];
 const TAGS_TYPE2 = [
   "八幡西区", "八幡東区", "小倉北区", "小倉南区",
@@ -23,6 +24,8 @@ const PostForm = () => {
 
   const [selectedStoreId, setSelectedStoreId] = useState<string>("");
   const [selectedPlaceId, setSelectedPlaceId] = useState<string>("");
+
+  const router = useRouter();
 
   // タグを取得
   useEffect(() => {
@@ -47,6 +50,8 @@ const PostForm = () => {
       alert("タグを両方選んでください。");
       return;
     }
+     router.push("/"); 
+    
   };
 
   return (
