@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 
+
 // タグ項目
 const TAGS_TYPE1 = [
   "カフェ", "レストラン", "居酒屋", "bar",
@@ -57,7 +58,7 @@ const PostForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       
-      <div>
+      <div className="image">
         <label>
           画像
           <input
@@ -74,7 +75,7 @@ const PostForm = () => {
       </div>
       <div>
         <label>
-          タイトル
+          場所
           <input
             type="text"
             value={title}
@@ -84,8 +85,8 @@ const PostForm = () => {
         </label>
       </div>
       <div>
-        <label>
-          内容
+        <label className="content-label">
+          コメント
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -127,7 +128,7 @@ const PostForm = () => {
           </select>
         </label>
       </div>
-      <button type="submit">投稿</button>
+      <button  className="toukou" type="submit">投稿</button>
     </form>
   );
 };
