@@ -7,6 +7,5 @@ const nextConfig: NextConfig = {
     unoptimized: true,       // 画像最適化をオフ
   },
 };
-
 export default nextConfig;
 
