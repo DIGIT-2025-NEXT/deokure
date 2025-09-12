@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 
-
 // タグ項目
 const TAGS_TYPE1 = [
   "カフェ", "レストラン", "居酒屋", "bar",
@@ -19,45 +18,113 @@ const PostForm = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
-
-  const [storeTags, setStoreTags] = useState<{ id: string; name: string }[]>([]);
-  const [placeTags, setPlaceTags] = useState<{ id: string; name: string }[]>([]);
-
-  const [selectedStoreId, setSelectedStoreId] = useState<string>("");
-  const [selectedPlaceId, setSelectedPlaceId] = useState<string>("");
+  const [selectedStoreName, setSelectedStoreName] = useState<string>("");
+  const [selectedPlaceName, setSelectedPlaceName] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
-  // タグを取得
+  // ユーザー情報を取得
   useEffect(() => {
-    const fetchTags = async () => {
-      const { data: storeData } = await supabase.from("tag_store").select("id, name");
-      const { data: placeData } = await supabase.from("tag_place").select("id, name");
-      setStoreTags(storeData || []);
-      setPlaceTags(placeData || []);
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
     };
-    fetchTags();
+    getUser();
   }, []);
+
+  // 画像をSupabase Storageにアップロード
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `post-images/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('post-images') // バケット名は適切に変更してください
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        return null;
+      }
+
+      // 公開URLを取得
+      const { data } = supabase.storage
+        .from('post-images')
+        .getPublicUrl(filePath);
+
+      return data.publicUrl;
+    } catch (error) {
+      console.error('Image upload error:', error);
+      return null;
+    }
+  };
 
   // 投稿処理
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!title || !content) {
       alert("タイトルと内容は必須です。");
+      setIsLoading(false);
       return;
     }
-    if (!selectedStoreId || !selectedPlaceId) {
+    if (!selectedStoreName || !selectedPlaceName) {
       alert("タグを両方選んでください。");
+      setIsLoading(false);
       return;
     }
-     router.push("/"); 
-    
+    if (!userId) {
+      alert("ユーザー情報が取得できません。再度ログインしてください。");
+      setIsLoading(false);
+      return;
+    }
+
+    let imageUrl: string | null = null;
+
+    // 画像がある場合はアップロード
+    if (image) {
+      imageUrl = await uploadImage(image);
+      if (!imageUrl) {
+        alert("画像のアップロードに失敗しました。");
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    // Supabaseに保存
+    const { data, error } = await supabase.from("post").insert([
+      {
+        title,
+        content,
+        image_url: imageUrl,
+        user_id: userId,
+        tag_store_name: selectedStoreName,
+        tag_place_name: selectedPlaceName,
+      },
+    ]);
+
+    if (error) {
+      console.error("Insert Error:", error.message);
+      alert("保存に失敗しました: " + error.message);
+      setIsLoading(false);
+      return;
+    }
+
+    console.log("Insert Success:", data);
+    alert("保存できました！");
+
+    // 保存できたらトップへ
+    router.push("/");
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      
       <div className="image">
         <label>
           画像
@@ -96,10 +163,12 @@ const PostForm = () => {
       </div>
       <div>
         <label>
-          店舗タグ
+          店舗選択
           <select
-            value={selectedStoreId}
-            onChange={(e) => setSelectedStoreId(e.target.value)}
+            id="tag_store"
+            name="tag_store"
+            value={selectedStoreName}
+            onChange={(e) => setSelectedStoreName(e.target.value)}
             required
           >
             <option value="">選択してください</option>
@@ -113,10 +182,12 @@ const PostForm = () => {
       </div>
       <div>
         <label>
-          場所タグ
+          場所選択
           <select
-            value={selectedPlaceId}
-            onChange={(e) => setSelectedPlaceId(e.target.value)}
+            id="tag_place"
+            name="tag_place"
+            value={selectedPlaceName}
+            onChange={(e) => setSelectedPlaceName(e.target.value)}
             required
           >
             <option value="">選択してください</option>
@@ -128,7 +199,9 @@ const PostForm = () => {
           </select>
         </label>
       </div>
-      <button  className="toukou" type="submit">投稿</button>
+      <button className="toukou" type="submit" disabled={isLoading}>
+        {isLoading ? "投稿中..." : "投稿"}
+      </button>
     </form>
   );
 };
