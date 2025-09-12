@@ -5,11 +5,11 @@ import { Search, Plus , HelpCircle} from "lucide-react";
 
 //投稿データの仮置き。実際はここを SupabaseなどDB に置き換えて使う予定。
 const mockPosts = [
-  { id: "5", image:"", content: "スペースワールド跡地に新しい施設ができるらしい！", created_at: "2025-09-06T12:00:00" },
-  { id: "4", image:"", content: "北九州の美味しいラーメン屋さんを発見🍜", created_at: "2025-09-06T11:30:00" },
-  { id: "3", image:"", content: "戸畑祇園大山笠、迫力がすごい！", created_at: "2025-09-05T10:00:00" },
-  { id: "2", image:"", content: "小倉城のライトアップを見に行ったよ✨", created_at: "2025-09-04T20:00:00" },
-  { id: "1", image:"", content: "門司港レトロに遊びに行ってきました！", created_at: "2025-09-03T15:00:00" },
+  { id: "5", image:"120.png", tag:"八幡東", content: "スペースワールド跡地に新しい施設ができるらしい！", created_at: "2025-09-06T12:00:00" },
+  { id: "4", image:"115.png", tag:"若松", content: "北九州の美味しいラーメン屋さんを発見🍜", created_at: "2025-09-06T11:30:00" },
+  { id: "3", image:"1952427_s.jpg", tag:"戸畑", content: "戸畑祇園大山笠、迫力がすごい！", created_at: "2025-09-05T10:00:00" },
+  { id: "2", image:"32366070_s.jpg", tag:"小倉北", content: "小倉城のライトアップを見に行ったよ✨", created_at: "2025-09-04T20:00:00" },
+  { id: "1", image:"mojiko2-2.jpg", tag:"門司港", content: "門司港レトロに遊びに行ってきました！", created_at: "2025-09-03T15:00:00" },
 ];
 
 export default function HomePage() {
@@ -48,6 +48,11 @@ export default function HomePage() {
             className="rounded-lg mb-2"
           />
           )}
+        </p>
+        <p>
+          <span className="px-2 py-1 text-xs font-medium border border-gray-300 rounded-full bg-gray-100 text-gray-700">
+            {post.tag}
+          </span>
         </p>
         <p>{post.content}</p>
         <p className="text-xs text-gray-500 mt-2">
