@@ -1,0 +1,33 @@
+button{
+    margin: 0 auto;
+    display: flex;
+}
+
+div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image{
+    max-width: 100%;
+    height: 400px;
+}
+
+label{
+    width: 337px;
+}
+
+/* Template_style.css */
+.content-label {
+  display: block;     /* ラベル全体をブロック化 */
+  margin-bottom: 12px;
+}
+
+.content-label textarea {
+  display: block;     /* textareaを改行させる */
+  margin-top: 4px;    /* 「内容」との間に少し余白 */
+  width: 100%;
+  height: 100px;
+}
+
