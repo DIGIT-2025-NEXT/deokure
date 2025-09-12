@@ -7,7 +7,7 @@ import { supabase } from "../lib/supabaseClient";
 // タグ項目
 const TAGS_TYPE1 = [
   "カフェ", "レストラン", "居酒屋", "bar",
-  "", "い", "う」", "え"
+  "城", "博物館", "美術館", "公園", "お祭り","その他"
 ];
 const TAGS_TYPE2 = [
   "八幡西区", "八幡東区", "小倉北区", "小倉南区",
@@ -131,85 +131,92 @@ const PostForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="image">
-        <label>
-          画像
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                setImage(file);
-              }
-            }}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          場所
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label className="content-label">
-          コメント
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          店舗選択
-          <select
-            id="tag_store"
-            name="tag_store"
-            value={selectedStoreName}
-            onChange={(e) => setSelectedStoreName(e.target.value)}
-            required
-          >
-            <option value="">選択してください</option>
-            {TAGS_TYPE1.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <div>
-        <label>
-          場所選択
-          <select
-            id="tag_place"
-            name="tag_place"
-            value={selectedPlaceName}
-            onChange={(e) => setSelectedPlaceName(e.target.value)}
-            required
-          >
-            <option value="">選択してください</option>
-            {TAGS_TYPE2.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <button className="toukou" type="submit" disabled={isLoading}>
-        {isLoading ? "投稿中..." : "投稿"}
-      </button>
-    </form>
+    <main className="relative max-w-2xl mx-auto">
+      {/* ヘッダー */}
+      <header className="flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
+        <h1 className="text-lg font-bold">北九log</h1>
+      </header>
+
+      <form onSubmit={handleSubmit}>
+        <div className="image">
+          <label>
+            画像
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setImage(file);
+                }
+              }}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            場所
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label className="content-label">
+            コメント
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label className="tag-label">
+            店舗選択
+            <select
+              id="tag_store"
+              name="tag_store"
+              value={selectedStoreName}
+              onChange={(e) => setSelectedStoreName(e.target.value)}
+              required
+            >
+              <option value="">選択してください</option>
+              {TAGS_TYPE1.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div>
+          <label className="tag-label">
+            場所選択
+            <select
+              id="tag_place"
+              name="tag_place"
+              value={selectedPlaceName}
+              onChange={(e) => setSelectedPlaceName(e.target.value)}
+              required
+            >
+              <option value="">選択してください</option>
+              {TAGS_TYPE2.map((tag) => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <button className="toukou" type="submit" disabled={isLoading}>
+          {isLoading ? "投稿中..." : "投稿"}
+        </button>
+      </form>
+    </main>
   );
 };
 
