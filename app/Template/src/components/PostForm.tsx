@@ -1,13 +1,20 @@
+<<<<<<< HEAD
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { supabase } from "../lib/supabaseClient";
+=======
 
 "use client";
 
 import React, { useState } from "react";
 import { supabase } from "../lib/supabaseClient"
+>>>>>>> 256a33b28d54e2147fcfa715711f00c5d8aae5bc
 
 // タグ項目
 const TAGS_TYPE1 = [
   "カフェ", "レストラン", "居酒屋", "bar",
-  "", "", "", ""
+  "あ", "い", "う」", "え"
 ];
 const TAGS_TYPE2 = [
   "八幡西区", "八幡東区", "小倉北区", "小倉南区",
@@ -18,22 +25,25 @@ const PostForm = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [selectedTags1, setSelectedTags1] = useState<string[]>([]);
-  const [selectedTags2, setSelectedTags2] = useState<string[]>([]);
 
-  // タグ選択トグル
-  const toggleTag = (type: 1 | 2, tag: string) => {
-    if (type === 1) {
-      setSelectedTags1(prev =>
-        prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-      );
-    } else {
-      setSelectedTags2(prev =>
-        prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-      );
-    }
-  };
+  const [storeTags, setStoreTags] = useState<{ id: string; name: string }[]>([]);
+  const [placeTags, setPlaceTags] = useState<{ id: string; name: string }[]>([]);
 
+  const [selectedStoreId, setSelectedStoreId] = useState<string>("");
+  const [selectedPlaceId, setSelectedPlaceId] = useState<string>("");
+
+  // タグを取得
+  useEffect(() => {
+    const fetchTags = async () => {
+      const { data: storeData } = await supabase.from("tag_store").select("id, name");
+      const { data: placeData } = await supabase.from("tag_place").select("id, name");
+      setStoreTags(storeData || []);
+      setPlaceTags(placeData || []);
+    };
+    fetchTags();
+  }, []);
+
+  // 投稿処理
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -41,137 +51,86 @@ const PostForm = () => {
       alert("タイトルと内容は必須です。");
       return;
     }
-    if (selectedTags1.length === 0 || selectedTags2.length === 0) {
-      alert("両方のタグを最低1つずつ選択してください。");
+    if (!selectedStoreId || !selectedPlaceId) {
+      alert("タグを両方選んでください。");
       return;
-    }
-
-    let imageUrl = "";
-    if (image) {
-      const { data, error } = await supabase.storage
-        .from("images")
-        .upload(`public/${image.name}`, image);
-
-      if (error) {
-        alert("画像のアップロードに失敗しました。");
-        return;
-      }
-      imageUrl = data?.path ?? "";
-    }
-
-    // 投稿作成
-    const { data: postData, error: postError } = await supabase
-      .from("posts")
-      .insert([{
-        title,
-        content,
-        imageUrl,
-        tagsType1: selectedTags1,
-        tagsType2: selectedTags2
-      }])
-      .select(); // 投稿ID取得のためselect
-
-    if (postError || !postData || postData.length === 0) {
-      alert("投稿の作成に失敗しました。");
-    } else {
-      // 投稿ID取得
-      const postId = postData[0].id;
-
-      // タグ保存（tagsテーブルにinsert）
-      // tagsType1
-      for (const tag of selectedTags1) {
-        await supabase.from("tags").insert([
-          { post_id: postId, type: 1, tag }
-        ]);
-      }
-      // tagsType2
-      for (const tag of selectedTags2) {
-        await supabase.from("tags").insert([
-          { post_id: postId, type: 2, tag }
-        ]);
-      }
-
-      alert("投稿が作成されました。");
-      setTitle("");
-      setContent("");
-      setImage(null);
-      setSelectedTags1([]);
-      setSelectedTags2([]);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* 画像 */}
+      
       <div>
-        <label htmlFor="image">画像:</label>
-        <input
-          type="file"
-          id="image"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
-        />
+        <label>
+          画像
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setImage(file);
+              }
+            }}
+          />
+        </label>
       </div>
-      {/* 名前（タイトル） */}
       <div>
-        <label htmlFor="title">名前:</label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
+        <label>
+          タイトル
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </label>
       </div>
-      {/* コメント */}
       <div>
-        <label htmlFor="content">コメント:</label>
-        <textarea
-          id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-        />
+        <label>
+          内容
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+          />
+        </label>
       </div>
-      {/* タグ種類1 */}
       <div>
-        <label>タグ種類1:</label>
-        <div>
-          {TAGS_TYPE1.map(tag => (
-            <button
-              type="button"
-              key={tag}
-              onClick={() => toggleTag(1, tag)}
-              style={{
-                margin: "2px",
-                background: selectedTags1.includes(tag) ? "#4caf50" : "#eee"
-              }}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        <label>
+          店舗タグ
+          <select
+            value={selectedStoreId}
+            onChange={(e) => setSelectedStoreId(e.target.value)}
+            required
+          >
+            <option value="">選択してください</option>
+            {TAGS_TYPE1.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
-      {/* タグ種類2 */}
       <div>
-        <label>タグ種類2:</label>
-        <div>
-          {TAGS_TYPE2.map(tag => (
-            <button
-              type="button"
-              key={tag}
-              onClick={() => toggleTag(2, tag)}
-              style={{
-                margin: "2px",
-                background: selectedTags2.includes(tag) ? "#2196f3" : "#eee"
-              }}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        <label>
+          場所タグ
+          <select
+            value={selectedPlaceId}
+            onChange={(e) => setSelectedPlaceId(e.target.value)}
+            required
+          >
+            <option value="">選択してください</option>
+            {TAGS_TYPE2.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
-      <button type="submit">投稿する</button>
+      <button type="submit">投稿</button>
     </form>
   );
 };
