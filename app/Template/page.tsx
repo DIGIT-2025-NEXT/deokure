@@ -1,6 +1,6 @@
 import React from "react";
 import PostForm from "./src/components/PostForm";
-import "./src/styles/Template_style.css";
+//import "./src/styles/Template_style.css";
 
 const PostPage = () => {
     return (
