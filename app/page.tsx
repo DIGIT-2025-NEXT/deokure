@@ -1,5 +1,6 @@
 // app/page.tsx
 
+
 import Link from "next/link";
 import Image from "next/image";
 import { Search, Plus, HelpCircle } from "lucide-react";
@@ -10,6 +11,7 @@ export default async function HomePage() {
   const { data: posts, error } = await supabase
     .from("post") // ← Supabaseのテーブル名（例: posts）
     .select("id, image_url, tag_place_name, tag_store_name, title, content")
+
 
   if (error) {
     console.error("Supabase Error:", error.message);
@@ -29,6 +31,7 @@ export default async function HomePage() {
         </Link>
       </header>
 
+
       {/* 投稿一覧 */}
       <div className="w-full p-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {posts?.map((post) => (
@@ -47,10 +50,13 @@ export default async function HomePage() {
             </div>
 
 
+
             {/* タグ */}
             <p>
               <span className="px-2 py-1 text-xs font-medium border border-gray-300 rounded-full bg-gray-100 text-gray-700">
+
                 {post.tag_place_name},{post.tag_store_name}
+
               </span>
             </p>
 
@@ -59,7 +65,9 @@ export default async function HomePage() {
 
             {/* 投稿日時 */}
             <p className="text-xs text-gray-500 mt-2">
+
               {post.title}
+
             </p>
           </article>
         ))}

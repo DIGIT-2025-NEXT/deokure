@@ -41,13 +41,10 @@ const PostForm = () => {
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `post-images/${fileName}`;
-
-      //認証がない状態で動かすためにデモの値セット
-      //setUserId("00000000-0000-0000-0000-000000000000");
+      const filePath = `${fileName}`; // post-images/は不要（バケット名で指定済み）
 
       const { error: uploadError } = await supabase.storage
-        .from('post-images') // バケット名は適切に変更してください
+        .from('post-images') // バケット名
         .upload(filePath, file);
 
       if (uploadError) {
@@ -55,12 +52,12 @@ const PostForm = () => {
         return null;
       }
 
-      // 公開URLを取得
+      // 公開URLを取得（正しい形式）
       const { data } = supabase.storage
         .from('post-images')
-        .getPublicUrl(fileName);
-      alert('Image uploaded to: {data}');  
-
+        .getPublicUrl(filePath);
+      
+      console.log('Image uploaded successfully. URL:', data.publicUrl);
       return data.publicUrl;
     } catch (error) {
       console.error('Image upload error:', error);
@@ -83,11 +80,6 @@ const PostForm = () => {
       setIsLoading(false);
       return;
     }
-    /*if (!userId) {
-      alert("ユーザー情報が取得できません。再度ログインしてください。");
-      setIsLoading(false);
-      return;
-    }*/
 
     let imageUrl: string | null = null;
 
@@ -107,9 +99,7 @@ const PostForm = () => {
       {
         title,
         content,
-        image_url: "https://swoukqrviikfqcmvsqni.supabase.co/storage/v1/object/public/post-images/post-images/1757653909969.png",
-        // user_id: userId, // ログイン機能実装時に有効化
-        //user_id: userId, // 一時的にダミーIDを使用
+        image_url: imageUrl, // 画像URLを保存
         user_id: "00000000-0000-0000-0000-000000000000", // デモ用ダミーID
         tag_store_name: selectedStoreName,
         tag_place_name: selectedPlaceName,
@@ -126,8 +116,16 @@ const PostForm = () => {
     console.log("Insert Success:", data);
     alert("保存できました！");
 
+    // フォームをリセット
+    setTitle("");
+    setContent("");
+    setImage(null);
+    setSelectedStoreName("");
+    setSelectedPlaceName("");
+
     // 保存できたらトップへ
     router.push("/");
+    setIsLoading(false);
   };
 
   return (
@@ -137,82 +135,100 @@ const PostForm = () => {
         <h1 className="text-lg font-bold">北九log</h1>
       </header>
 
-      <form onSubmit={handleSubmit}>
-        <div className="image">
-          <label>
+      <form onSubmit={handleSubmit} className="p-4 space-y-4">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             画像
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  setImage(file);
-                }
-              }}
-            />
           </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setImage(file);
+              }
+            }}
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
+          {image && (
+            <p className="text-sm text-gray-500">選択されたファイル: {image.name}</p>
+          )}
         </div>
-        <div>
-          <label>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             場所
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
           </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          />
         </div>
-        <div>
-          <label className="content-label">
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             コメント
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              required
-            />
           </label>
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+            rows={4}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          />
         </div>
-        <div>
-          <label className="tag-label">
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             店舗選択
-            <select
-              id="tag_store"
-              name="tag_store"
-              value={selectedStoreName}
-              onChange={(e) => setSelectedStoreName(e.target.value)}
-              required
-            >
-              <option value="">選択してください</option>
-              {TAGS_TYPE1.map((tag) => (
-                <option key={tag} value={tag}>
-                  {tag}
-                </option>
-              ))}
-            </select>
           </label>
+          <select
+            id="tag_store"
+            name="tag_store"
+            value={selectedStoreName}
+            onChange={(e) => setSelectedStoreName(e.target.value)}
+            required
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">選択してください</option>
+            {TAGS_TYPE1.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
         </div>
-        <div>
-          <label className="tag-label">
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             場所選択
-            <select
-              id="tag_place"
-              name="tag_place"
-              value={selectedPlaceName}
-              onChange={(e) => setSelectedPlaceName(e.target.value)}
-              required
-            >
-              <option value="">選択してください</option>
-              {TAGS_TYPE2.map((tag) => (
-                <option key={tag} value={tag}>
-                  {tag}
-                </option>
-              ))}
-            </select>
           </label>
+          <select
+            id="tag_place"
+            name="tag_place"
+            value={selectedPlaceName}
+            onChange={(e) => setSelectedPlaceName(e.target.value)}
+            required
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">選択してください</option>
+            {TAGS_TYPE2.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
         </div>
-        <button className="toukou" type="submit" disabled={isLoading}>
+
+        <button 
+          type="submit" 
+          disabled={isLoading}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {isLoading ? "投稿中..." : "投稿"}
         </button>
       </form>
