@@ -1,14 +1,17 @@
 // app/page.tsx
+
+
 import Link from "next/link";
+import Image from "next/image";
 import { Search, Plus, HelpCircle } from "lucide-react";
 import { supabase } from "./Template/src/lib/supabaseClient"; // ← Supabaseクライアントをimport
 
 export default async function HomePage() {
   // 🔹 Supabaseから投稿データを取得
   const { data: posts, error } = await supabase
-    .from("posts") // ← Supabaseのテーブル名（例: posts）
-    .select("id, image, tag, content, created_at")
-    .order("created_at", { ascending: false });
+    .from("post") // ← Supabaseのテーブル名（例: posts）
+    .select("id, image_url, tag_place_name, tag_store_name, title, content")
+
 
   if (error) {
     console.error("Supabase Error:", error.message);
@@ -28,6 +31,7 @@ export default async function HomePage() {
         </Link>
       </header>
 
+
       {/* 投稿一覧 */}
       <div className="w-full p-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {posts?.map((post) => (
@@ -36,18 +40,23 @@ export default async function HomePage() {
             className="p-4 border rounded-xl shadow-sm bg-white flex flex-col"
           >
             {/* 画像がある場合のみ表示 */}
-            {post.image && (
-              <img
-                src={post.image}
-                alt="投稿画像"
-                className="rounded-lg mb-2"
+            <div className="relative w-full aspect-[4/3] mb-2">
+              <Image
+                 src={post.image_url}
+                 alt="投稿画像"
+                 fill
+                 className="object-cover rounded-lg"
               />
-            )}
+            </div>
+
+
 
             {/* タグ */}
             <p>
               <span className="px-2 py-1 text-xs font-medium border border-gray-300 rounded-full bg-gray-100 text-gray-700">
-                {post.tag}
+
+                {post.tag_place_name},{post.tag_store_name}
+
               </span>
             </p>
 
@@ -56,7 +65,9 @@ export default async function HomePage() {
 
             {/* 投稿日時 */}
             <p className="text-xs text-gray-500 mt-2">
-              {new Date(post.created_at).toLocaleString("ja-JP")}
+
+              {post.title}
+
             </p>
           </article>
         ))}
