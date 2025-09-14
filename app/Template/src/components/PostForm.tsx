@@ -198,13 +198,16 @@ const PostForm = () => {
             onChange={(e) => setTitle(e.target.value)}
             required
             className="flex-1 px-3 py-2 border bg-white border-gray-300 rounded focus:outline-none focus:border-blue-400"
-            placeholder="場所名を入力"
+            placeholder="場所名を入力(例：小倉城）"
           />
         </div>
 
         {/* タグ選択 */}
         <div className="space-y-3">
           {/* 店舗タグ */}
+          <div className="px-3 py-2 text-sm font-medium flex items-center">
+          カテゴリー選択
+          </div>
           <div className="flex flex-wrap gap-2">
             {TAGS_TYPE1.map((tag) => (
               <button
@@ -223,6 +226,9 @@ const PostForm = () => {
           </div>
 
           {/* 場所タグ */}
+           <div className="px-3 py-2 text-sm font-medium flex items-center">
+            地域選択
+          </div>
           <div className="flex flex-wrap gap-2">
             {TAGS_TYPE2.map((tag) => (
               <button
