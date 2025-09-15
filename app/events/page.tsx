@@ -1,4 +1,3 @@
-
 /*eslint-disable*/
 "use client"; 
 
@@ -21,17 +20,38 @@ const EventsPage: React.FC = () => {
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // 全投稿を取得
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const response = await fetch('/api/post');
-        const data: Post[] = await response.json();
-        setAllPosts(data);
-        setFilteredPosts(data); // 初期状態では全ての投稿を表示
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // dataが配列であることを確認
+        if (Array.isArray(data)) {
+          setAllPosts(data);
+          setFilteredPosts(data);
+        } else {
+          console.error('APIから返されたデータが配列ではありません:', data);
+          setAllPosts([]);
+          setFilteredPosts([]);
+        }
       } catch (error) {
         console.error('投稿取得エラー:', error);
+        setError(error instanceof Error ? error.message : '投稿の取得に失敗しました');
+        setAllPosts([]);
+        setFilteredPosts([]);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPosts();
@@ -50,6 +70,13 @@ const EventsPage: React.FC = () => {
   const handleSearch = async () => {
     setLoading(true);
     try {
+      // allPostsが配列であることを確認してからフィルタリング
+      if (!Array.isArray(allPosts)) {
+        console.error('allPostsが配列ではありません:', allPosts);
+        setFilteredPosts([]);
+        return;
+      }
+
       let filtered = [...allPosts];
 
       // エリアでフィルタリング（選択されている場合）
@@ -60,8 +87,6 @@ const EventsPage: React.FC = () => {
       }
 
       // タグでフィルタリング（選択されている場合）
-      // 現在のデータではtag_place_nameに地域名が入っているため、
-      // タグ検索は内容（content）で行う
       if (selectedTags.length > 0) {
         filtered = filtered.filter(post =>
           selectedTags.some(tag => post.content.includes(tag))
@@ -71,6 +96,7 @@ const EventsPage: React.FC = () => {
       setFilteredPosts(filtered);
     } catch (error) {
       console.error('検索エラー:', error);
+      setFilteredPosts([]);
     } finally {
       setLoading(false);
     }
@@ -108,6 +134,21 @@ const EventsPage: React.FC = () => {
           maxWidth: '800px',
           border: '1px solid rgba(255, 255, 255, 0.2)'
         }}>
+          {/* エラー表示 */}
+          {error && (
+            <div style={{ 
+              marginBottom: '2rem', 
+              padding: '1rem', 
+              backgroundColor: '#fee', 
+              borderRadius: '8px', 
+              border: '1px solid #fcc' 
+            }}>
+              <p style={{ margin: 0, color: '#c33', fontSize: '0.9rem' }}>
+                エラー: {error}
+              </p>
+            </div>
+          )}
+
           {/* 地域選択 */}
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
             <div style={{ width: '4px', height: '24px', backgroundColor: '#1976d2', borderRadius: '2px', marginRight: '12px' }} />
