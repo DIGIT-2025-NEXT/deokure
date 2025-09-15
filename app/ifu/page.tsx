@@ -11,7 +11,7 @@ export default function Home() {
       <>
        {/* ヘッダー */}
        <header className="w-full flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
-        <a href="http://localhost:3000/">
+        <a href="https://deokure-theta.vercel.app/">
         <h1 className="text-lg font-bold">北九log</h1>
         </a>
         <Link
