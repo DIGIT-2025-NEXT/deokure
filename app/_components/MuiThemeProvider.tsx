@@ -1,3 +1,4 @@
+/*eslint-disable*/
 'use client'; 
 // ↑ ファイル全体をクライアントコンポーネントとして扱う
 

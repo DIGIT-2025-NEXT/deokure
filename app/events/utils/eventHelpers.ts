@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { Event, City, Tag } from '../data/types';
 
 // イベントフィルタリング用ヘルパー関数

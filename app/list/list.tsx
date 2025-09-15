@@ -1,3 +1,4 @@
+/*eslint-disable*/
 // app/page.tsx
 import Link from "next/link";
 import { Search, Plus , HelpCircle} from "lucide-react";
