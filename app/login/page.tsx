@@ -6,8 +6,6 @@ import { signIn } from 'next-auth/react';
 import Link from "next/link";
 import { HelpCircle } from "lucide-react";
 
-
-
 const App = () => {
   // Googleログインボタンがクリックされたときに呼び出される関数
   const handleGoogleLogin = () => {
@@ -52,5 +50,6 @@ const App = () => {
     </>
   );
 };
+
 
 export default App;
