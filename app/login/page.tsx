@@ -1,64 +1,56 @@
-"use client";
+'use client';
 
-import { Container, Box, TextField, Button, Typography, Card, CardContent, Snackbar } from "@mui/material";
-import { useState } from "react";
-import { useRouter } from "next/navigation"; // ← 追加
+import React from 'react';
+import { Button } from '@mui/material';
+import { signIn } from 'next-auth/react';
+import Link from "next/link";
+import { HelpCircle } from "lucide-react";
 
-export default function LoginPage() {
-  const [name, setName] = useState("");
-  const [open, setOpen] = useState(false);
-  const router = useRouter(); // ← 追加
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name.trim()) {
-      setOpen(true);
 
-      // メッセージを少し表示してから遷移したい場合
-      setTimeout(() => {
-        router.push("/"); // トップページに遷移
-      }, 500); // 0.5秒後に遷移
-    }
+const App = () => {
+  // Googleログインボタンがクリックされたときに呼び出される関数
+  const handleGoogleLogin = () => {
+    // Google認証を実行（next-authの signIn を使用）
+    signIn('google', { callbackUrl: '/' });
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
-      <Card sx={{ borderRadius: 4, boxShadow: 3 }}>
-        <CardContent>
-          <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
-            ログイン
-          </Typography>
-          <Box component="form" onSubmit={handleLogin} noValidate>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="name"
-              label="名前"
-              name="name"
-              autoFocus
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              入室する
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
+    <>
+      {/* ヘッダー */}
+      <header className="w-full flex justify-between items-center bg-blue-600 text-white px-4 py-3 shadow">
+        <h1 className="text-lg font-bold">北九log</h1>
+        <Link
+          href="/ifu"
+          className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+        >
+          <HelpCircle className="w-5 h-5" />
+        </Link>
+      </header>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 font-sans p-4">
+        <div className="w-full max-w-sm p-8 space-y-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg transform transition-all hover:scale-105">
+          <div className="text-center">
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+              ログイン
+            </h1>
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              続行するにはログインしてください。
+            </p>
+          </div>
 
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={() => setOpen(false)}
-        message={`ようこそ、${name}さん！`}
-      />
-    </Container>
+          {/* Google ログインボタン */}
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={handleGoogleLogin}
+          >
+            Googleでログイン
+          </Button>
+        </div>
+      </div>
+    </>
   );
-}
+};
+
+export default App;

@@ -36,9 +36,13 @@ export default function Home() {
             <p>
                 1. ホーム画面の、+ボタンを押すことで、投稿画面が表示されます。
             </p>
-            <p>
-                image
-            </p>
+            <img
+            src="/ifu_1.png"
+            alt="ホーム画面"
+            width={400}
+            height={200}
+            style={{ width: '40%', height: 'auto' }}
+            />
             <p>
                 2. 下にあるように、画像、タグ、コメント、URL(任意)を入力し、投稿ボタンを押すことで投稿できます。
             </p>
@@ -55,9 +59,13 @@ export default function Home() {
             <p>
                 1. ホーム画面の🔍ボタンを押すことで、検索画面が表示されます。
             </p>
-            <p>
-                image
-            </p>
+            <img
+            src="/ifu_3.png"
+            alt="ホーム画面"
+            width={400}
+            height={200}
+            style={{ width: '40%', height: 'auto' }}
+            />
             <p>
                 2. 検索画面では、タグ、場所(何区か)を選択することで、検索が出来ます。
             </p>
@@ -68,12 +76,6 @@ export default function Home() {
             height={200}
             style={{ width: '40%', height: 'auto' }}
             />
-            <p>
-                3. 検索結果やホーム画面で、投稿をクリック(タッチ)することで閲覧できます。
-            </p>
-            <p>
-                image
-            </p>
           <p className="text-3xl font-bold">
             よくある質問
           </p>
@@ -82,12 +84,6 @@ export default function Home() {
           </p>
           <p>
              A.出来ません。タグと場所を選択することで検索できます。
-          </p>
-          <p>
-            Q.
-          </p>
-          <p>
-            A.
           </p>
         </main>
       </div>
