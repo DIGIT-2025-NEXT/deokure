@@ -43,7 +43,7 @@ const PostForm = () => {
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const filePath = `post-image/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('post-images')
@@ -113,7 +113,7 @@ const PostForm = () => {
       }
     }
 
-    const { data, error } = await supabase.from("post").insert([
+    const { data, error } = await supabase.from("posts").insert([
       {
         title,
         content,
@@ -130,10 +130,10 @@ const PostForm = () => {
       setIsLoading(false);
       return;
     }
-
+{/*
     console.log("Insert Success:", data);
     alert("保存できました！");
-
+*/}
     setTitle("");
     setContent("");
     setImage(null);
