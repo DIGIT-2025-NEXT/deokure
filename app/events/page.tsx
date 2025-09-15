@@ -13,7 +13,7 @@ interface Post {
   created_at?: string | Date;
 }
 
-const availableTags = ["音楽", "花火", "フード", "スポーツ", "ワークショップ", "祭り"];
+const availableTags = ["音楽", "花火", "フード", "スポーツ", "ワークショップ", "祭り","カフェ","城"];
 
 const EventsPage: React.FC = () => {
   const [allPosts, setAllPosts] = useState<Post[]>([]);
